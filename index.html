@@ -1,13 +1,739 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <!-- Tells mobile browsers to use the device width, not zoom out -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ashburn-resource-hub</title>
+
+    <!-- SEO + accessibility: descriptive page title -->
+    <title>Ashburn Community Resource Hub | Loudoun County, VA</title>
+    <meta
+      name="description"
+      content="A comprehensive directory of community resources, support services, non-profits, and events available to residents of Ashburn and Loudoun County, Virginia."
+    />
+
+    <!-- Open Graph tags: makes sharing on social media look good -->
+    <meta property="og:title" content="Loudoun County Community Resource Hub" />
+    <meta
+      property="og:description"
+      content="Find food, health, housing, youth, and crisis support resources in Loudoun County, VA."
+    />
+    <meta property="og:type" content="website" />
+
+    <!-- Google Fonts: Inter for body, Playfair Display for headings -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Remix Icons: a clean, free icon library -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css"
+      rel="stylesheet"
+    />
+
+    <!-- Our main stylesheet -->
+    <link rel="stylesheet" href="/src/style.css" />
   </head>
+
   <body>
-    <div id="app"></div>
+    <!-- =============================================
+         SKIP LINK: Accessibility feature - lets
+         keyboard users jump straight to main content
+    ============================================= -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- =============================================
+         NAVBAR
+         - Logo on the left
+         - Nav links in the center
+         - Dark mode toggle + CTA on the right
+         - Hamburger menu for mobile
+    ============================================= -->
+    <header class="navbar" id="navbar" role="banner">
+      <div class="container navbar__inner">
+        <!-- Logo -->
+        <a href="#" class="navbar__logo" aria-label="Loudoun County Resource Hub Home">
+          <span class="navbar__logo-icon" aria-hidden="true">
+            <i class="ri-community-line"></i>
+          </span>
+          <span class="navbar__logo-text">Loudoun County <strong>Resource Hub</strong></span>
+        </a>
+
+        <!-- Desktop Navigation Links -->
+        <nav class="navbar__nav" role="navigation" aria-label="Primary navigation">
+          <a href="#highlights" class="navbar__link">Featured</a>
+          <a href="#directory" class="navbar__link">Directory</a>
+          <a href="#submit" class="navbar__link">Submit Resource</a>
+          <a href="about.html" class="navbar__link">About</a>
+          <a href="references.html" class="navbar__link">References</a>
+        </nav>
+
+        <!-- Right side: dark mode toggle + mobile hamburger -->
+        <div class="navbar__actions">
+          <!-- Dark Mode Toggle Button -->
+          <button
+            class="btn-icon"
+            id="darkModeToggle"
+            aria-label="Toggle dark mode"
+            title="Toggle dark mode"
+          >
+            <!-- Sun icon shows in dark mode, moon shows in light mode -->
+            <i class="ri-moon-line" id="darkModeIcon" aria-hidden="true"></i>
+          </button>
+
+          <!-- Hamburger menu button (only visible on mobile) -->
+          <button
+            class="btn-icon hamburger"
+            id="hamburger"
+            aria-label="Open navigation menu"
+            aria-expanded="false"
+            aria-controls="mobileMenu"
+          >
+            <i class="ri-menu-line" aria-hidden="true"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Mobile Dropdown Menu (hidden by default, shown via JS) -->
+      <div class="mobile-menu" id="mobileMenu" role="dialog" aria-label="Mobile navigation">
+        <a href="#highlights" class="mobile-menu__link">Featured Resources</a>
+        <a href="#directory" class="mobile-menu__link">Full Directory</a>
+        <a href="#submit" class="mobile-menu__link">Submit a Resource</a>
+        <a href="about.html" class="mobile-menu__link">About</a>
+        <a href="references.html" class="mobile-menu__link">References</a>
+      </div>
+    </header>
+
+    <!-- =============================================
+         MAIN CONTENT LANDMARK
+         (required for accessibility / screen readers)
+    ============================================= -->
+    <main id="main-content">
+
+      <!-- =============================================
+           HERO SECTION
+           - Full-viewport height
+           - Animated headline and subtext
+           - Two CTA buttons
+           - Floating stat cards
+           - Background blob animations
+      ============================================= -->
+      <section class="hero" aria-labelledby="hero-heading">
+        <!-- Decorative animated background blobs (aria-hidden so screen readers skip them) -->
+        <div class="hero__blob hero__blob--1" aria-hidden="true"></div>
+        <div class="hero__blob hero__blob--2" aria-hidden="true"></div>
+        <div class="hero__blob hero__blob--3" aria-hidden="true"></div>
+
+        <div class="container hero__content">
+          <!-- Badge pill above heading -->
+          <div class="hero__badge animate-fade-up" aria-label="Location: Ashburn, Virginia">
+            <i class="ri-map-pin-2-fill" aria-hidden="true"></i>
+            Ashburn, Virginia
+          </div>
+
+          <!-- Main heading — split into two lines for visual hierarchy -->
+          <h1 class="hero__heading animate-fade-up" id="hero-heading">
+            Your Community,<br />
+            <span class="hero__heading-accent">Connected.</span>
+          </h1>
+
+          <!-- Subheading description -->
+          <p class="hero__subtext animate-fade-up">
+            One place to find every resource Loudoun County has to offer —
+            from food assistance and healthcare to youth programs and crisis support.
+          </p>
+
+          <!-- Call-to-action buttons -->
+          <div class="hero__cta animate-fade-up">
+            <a href="#directory" class="btn btn--primary">
+              <i class="ri-search-line" aria-hidden="true"></i>
+              Explore Resources
+            </a>
+            <a href="#submit" class="btn btn--secondary">
+              <i class="ri-add-circle-line" aria-hidden="true"></i>
+              Add a Resource
+            </a>
+          </div>
+
+          <!-- Floating stat cards — show quick numbers about the hub -->
+          <div class="hero__stats animate-fade-up" aria-label="Hub statistics">
+            <div class="stat-card">
+              <!-- These numbers are updated dynamically by JS based on the data array -->
+              <span class="stat-card__number" id="statTotal">25+</span>
+              <span class="stat-card__label">Resources Listed</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-card__number">6</span>
+              <span class="stat-card__label">Categories</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-card__number">Free</span>
+              <span class="stat-card__label">Always Free</span>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- =============================================
+           HIGHLIGHTS / SPOTLIGHT SECTION
+           Exactly 3 featured resource cards as required
+           by the TSA challenge. Each card has:
+           - A large icon
+           - Resource name and category
+           - Short description
+           - Key details (phone, hours, etc.)
+           - A "Learn More" link
+      ============================================= -->
+      <section class="highlights" id="highlights" aria-labelledby="highlights-heading">
+        <div class="container">
+          <!-- Section header -->
+          <div class="section-header">
+            <span class="section-label">Spotlight</span>
+            <h2 class="section-title" id="highlights-heading">
+              Featured Resources
+            </h2>
+            <p class="section-subtitle">
+              Three essential services every Loudoun County resident should know about.
+            </p>
+          </div>
+
+          <!-- Three featured cards grid -->
+          <div class="highlights__grid" role="list">
+
+            <!-- ---- CARD 1: FOOD BANK ---- -->
+            <article class="highlight-card highlight-card--food" role="listitem">
+              <div class="highlight-card__icon-wrap" aria-hidden="true">
+                <i class="ri-restaurant-2-line"></i>
+              </div>
+              <div class="highlight-card__content">
+                <span class="highlight-card__category">Food Assistance</span>
+                <h3 class="highlight-card__title">Loudoun Hunger Relief</h3>
+                <p class="highlight-card__desc">
+                  Loudoun Hunger Relief operates multiple food pantries across the county,
+                  providing nutritious groceries and emergency food boxes to families in need —
+                  no income verification required for first-time visits.
+                </p>
+                <ul class="highlight-card__details" aria-label="Key details">
+                  <li>
+                    <i class="ri-map-pin-line" aria-hidden="true"></i>
+                    <span>Leesburg, Sterling & Ashburn locations</span>
+                  </li>
+                  <li>
+                    <i class="ri-time-line" aria-hidden="true"></i>
+                    <span>Mon–Sat, hours vary by location</span>
+                  </li>
+                  <li>
+                    <i class="ri-phone-line" aria-hidden="true"></i>
+                    <span>(703) 737-8005</span>
+                  </li>
+                </ul>
+                <a
+                  href="https://www.loudounhungerrelief.com"
+                  class="highlight-card__link"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Visit Loudoun Hunger Relief website (opens in new tab)"
+                >
+                  Visit Website <i class="ri-external-link-line" aria-hidden="true"></i>
+                </a>
+              </div>
+            </article>
+
+            <!-- ---- CARD 2: YOUTH CENTER ---- -->
+            <article class="highlight-card highlight-card--youth" role="listitem">
+              <div class="highlight-card__icon-wrap" aria-hidden="true">
+                <i class="ri-group-line"></i>
+              </div>
+              <div class="highlight-card__content">
+                <span class="highlight-card__category">Youth & Education</span>
+                <h3 class="highlight-card__title">Loudoun County Boys & Girls Club</h3>
+                <p class="highlight-card__desc">
+                  Providing after-school programs, summer camps, tutoring, and mentorship
+                  for youth ages 6–18 across Loudoun County. Membership is kept affordable
+                  to ensure every child has access regardless of family income.
+                </p>
+                <ul class="highlight-card__details" aria-label="Key details">
+                  <li>
+                    <i class="ri-map-pin-line" aria-hidden="true"></i>
+                    <span>Multiple sites across Loudoun County</span>
+                  </li>
+                  <li>
+                    <i class="ri-time-line" aria-hidden="true"></i>
+                    <span>Mon–Fri after school + full days in summer</span>
+                  </li>
+                  <li>
+                    <i class="ri-phone-line" aria-hidden="true"></i>
+                    <span>(703) 771-1088</span>
+                  </li>
+                </ul>
+                <a
+                  href="https://www.bgcloudoun.org"
+                  class="highlight-card__link"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Visit Boys and Girls Club of Loudoun website (opens in new tab)"
+                >
+                  Visit Website <i class="ri-external-link-line" aria-hidden="true"></i>
+                </a>
+              </div>
+            </article>
+
+            <!-- ---- CARD 3: FREE CLINIC ---- -->
+            <article class="highlight-card highlight-card--health" role="listitem">
+              <div class="highlight-card__icon-wrap" aria-hidden="true">
+                <i class="ri-heart-pulse-line"></i>
+              </div>
+              <div class="highlight-card__content">
+                <span class="highlight-card__category">Health Services</span>
+                <h3 class="highlight-card__title">Loudoun Free Clinic</h3>
+                <p class="highlight-card__desc">
+                  Offering free primary care, dental, vision, mental health, and
+                  prescription services to uninsured and underinsured Loudoun County
+                  residents. Entirely volunteer-run and funded by donations.
+                </p>
+                <ul class="highlight-card__details" aria-label="Key details">
+                  <li>
+                    <i class="ri-map-pin-line" aria-hidden="true"></i>
+                    <span>607 S. King St., Leesburg, VA 20175</span>
+                  </li>
+                  <li>
+                    <i class="ri-time-line" aria-hidden="true"></i>
+                    <span>Tue & Thu evenings, Sat mornings</span>
+                  </li>
+                  <li>
+                    <i class="ri-phone-line" aria-hidden="true"></i>
+                    <span>(703) 779-7699</span>
+                  </li>
+                </ul>
+                <a
+                  href="https://www.loudounfreeclinic.org"
+                  class="highlight-card__link"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Visit Loudoun Free Clinic website (opens in new tab)"
+                >
+                  Visit Website <i class="ri-external-link-line" aria-hidden="true"></i>
+                </a>
+              </div>
+            </article>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- =============================================
+           INTERACTIVE DIRECTORY SECTION
+           This is the most technically complex section.
+           It contains:
+           - A search bar (JS listens for input events)
+           - Category filter buttons (JS filters the data)
+           - A results grid (JS renders cards from data.js)
+           - A "no results" message when nothing matches
+      ============================================= -->
+      <section class="directory" id="directory" aria-labelledby="directory-heading">
+        <div class="container">
+
+          <!-- Section header -->
+          <div class="section-header">
+            <span class="section-label">Full Directory</span>
+            <h2 class="section-title" id="directory-heading">
+              All Community Resources
+            </h2>
+            <p class="section-subtitle">
+              Search by name or filter by category to find exactly what you need.
+            </p>
+          </div>
+
+          <!-- Search + Filter Controls -->
+          <div class="directory__controls">
+
+            <!-- Search Bar -->
+            <!-- The 'aria-controls' attribute tells screen readers this input controls the results grid -->
+            <div class="search-wrap">
+              <label for="searchInput" class="sr-only">Search resources</label>
+              <i class="ri-search-line search-wrap__icon" aria-hidden="true"></i>
+              <input
+                type="search"
+                id="searchInput"
+                class="search-input"
+                placeholder="Search by name, category, or keyword..."
+                aria-controls="resourceGrid"
+                aria-label="Search community resources"
+                autocomplete="off"
+              />
+              <!-- Clear button — JS shows/hides this based on input value -->
+              <button class="search-clear" id="searchClear" aria-label="Clear search" hidden>
+                <i class="ri-close-line" aria-hidden="true"></i>
+              </button>
+            </div>
+
+            <!-- Category Filter Buttons -->
+            <!-- data-category attribute is read by JS to filter the resources array -->
+            <div
+              class="filter-buttons"
+              role="group"
+              aria-label="Filter resources by category"
+            >
+              <button class="filter-btn active" data-category="all" aria-pressed="true">
+                <i class="ri-apps-line" aria-hidden="true"></i> All
+              </button>
+              <button class="filter-btn" data-category="Food Assistance" aria-pressed="false">
+                <i class="ri-restaurant-line" aria-hidden="true"></i> Food
+              </button>
+              <button class="filter-btn" data-category="Health Services" aria-pressed="false">
+                <i class="ri-heart-pulse-line" aria-hidden="true"></i> Health
+              </button>
+              <button class="filter-btn" data-category="Youth & Education" aria-pressed="false">
+                <i class="ri-graduation-cap-line" aria-hidden="true"></i> Youth
+              </button>
+              <button class="filter-btn" data-category="Housing & Shelter" aria-pressed="false">
+                <i class="ri-home-4-line" aria-hidden="true"></i> Housing
+              </button>
+              <button class="filter-btn" data-category="Support Services" aria-pressed="false">
+                <i class="ri-hand-heart-line" aria-hidden="true"></i> Support
+              </button>
+              <button class="filter-btn" data-category="Community Events" aria-pressed="false">
+                <i class="ri-calendar-event-line" aria-hidden="true"></i> Events
+              </button>
+            </div>
+
+            <!-- Results count — updated dynamically by JS -->
+            <!-- aria-live="polite" means screen readers announce count changes -->
+            <p class="directory__count" id="resultsCount" aria-live="polite">
+              Showing <strong id="resultsNumber">0</strong> resources
+            </p>
+          </div>
+
+          <!-- Resource Cards Grid -->
+          <!-- This div is populated entirely by JavaScript (see main.js renderCards function) -->
+          <div
+            class="resource-grid"
+            id="resourceGrid"
+            role="list"
+            aria-label="Community resources"
+          >
+            <!-- Cards are injected here by JS -->
+          </div>
+
+          <!-- No Results Message (hidden by default, shown by JS when no matches) -->
+          <div class="no-results" id="noResults" hidden aria-live="polite">
+            <i class="ri-search-eye-line no-results__icon" aria-hidden="true"></i>
+            <h3 class="no-results__title">No resources found</h3>
+            <p class="no-results__text">
+              Try adjusting your search or selecting a different category.
+            </p>
+            <button class="btn btn--secondary" id="resetSearch">
+              <i class="ri-refresh-line" aria-hidden="true"></i>
+              Reset Search
+            </button>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- =============================================
+           SUBMISSION FORM SECTION
+           Allows residents to submit new resources.
+           Fields: Name, Category, Description, Link, Email
+           JS handles validation before "submission"
+      ============================================= -->
+      <section class="submit-section" id="submit" aria-labelledby="submit-heading">
+        <div class="container">
+          <div class="submit-section__inner">
+
+            <!-- Left column: text content -->
+            <div class="submit-section__info">
+              <span class="section-label">Community Input</span>
+              <h2 class="section-title" id="submit-heading">
+                Know a Resource<br />We're Missing?
+              </h2>
+              <p class="section-subtitle">
+                Help us grow this directory. If you know of a community resource
+                that would benefit Loudoun County residents, submit it here and
+                our team will review it within 48 hours.
+              </p>
+              <ul class="submit-section__checklist" aria-label="What we accept">
+                <li>
+                  <i class="ri-checkbox-circle-fill" aria-hidden="true"></i>
+                  Non-profit organizations
+                </li>
+                <li>
+                  <i class="ri-checkbox-circle-fill" aria-hidden="true"></i>
+                  Free or low-cost services
+                </li>
+                <li>
+                  <i class="ri-checkbox-circle-fill" aria-hidden="true"></i>
+                  Community events and programs
+                </li>
+                <li>
+                  <i class="ri-checkbox-circle-fill" aria-hidden="true"></i>
+                  Government assistance programs
+                </li>
+              </ul>
+            </div>
+
+            <!-- Right column: the actual form -->
+            <div class="form-card">
+              <!-- Success message shown by JS after valid submission -->
+              <div class="form-success" id="formSuccess" hidden role="alert">
+                <i class="ri-checkbox-circle-fill form-success__icon" aria-hidden="true"></i>
+                <h3 class="form-success__title">Thank you!</h3>
+                <p class="form-success__text">
+                  Your submission has been received. We'll review it and add it
+                  to the directory within 48 hours.
+                </p>
+                <button class="btn btn--primary" id="submitAnother">
+                  Submit Another Resource
+                </button>
+              </div>
+
+              <!-- The form itself (hidden after successful submission) -->
+              <form
+                class="resource-form"
+                id="resourceForm"
+                novalidate
+                aria-label="Submit a community resource"
+              >
+                <h3 class="form-card__title">Submit a Resource</h3>
+
+                <!-- Resource Name -->
+                <div class="form-group">
+                  <label class="form-label" for="resName">
+                    Resource Name <span class="required" aria-label="required">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    id="resName"
+                    name="resName"
+                    class="form-input"
+                    placeholder="e.g. Ashburn Senior Center"
+                    aria-required="true"
+                    autocomplete="organization"
+                  />
+                  <!-- Error message shown by JS if field is empty -->
+                  <span class="form-error" id="resNameError" role="alert"></span>
+                </div>
+
+                <!-- Category Dropdown -->
+                <div class="form-group">
+                  <label class="form-label" for="resCategory">
+                    Category <span class="required" aria-label="required">*</span>
+                  </label>
+                  <select
+                    id="resCategory"
+                    name="resCategory"
+                    class="form-input form-select"
+                    aria-required="true"
+                  >
+                    <option value="">-- Select a category --</option>
+                    <option value="Food Assistance">Food Assistance</option>
+                    <option value="Health Services">Health Services</option>
+                    <option value="Youth & Education">Youth & Education</option>
+                    <option value="Housing & Shelter">Housing & Shelter</option>
+                    <option value="Support Services">Support Services</option>
+                    <option value="Community Events">Community Events</option>
+                  </select>
+                  <span class="form-error" id="resCategoryError" role="alert"></span>
+                </div>
+
+                <!-- Description -->
+                <div class="form-group">
+                  <label class="form-label" for="resDesc">
+                    Description <span class="required" aria-label="required">*</span>
+                  </label>
+                  <textarea
+                    id="resDesc"
+                    name="resDesc"
+                    class="form-input form-textarea"
+                    placeholder="Briefly describe what this resource offers..."
+                    rows="4"
+                    aria-required="true"
+                  ></textarea>
+                  <span class="form-error" id="resDescError" role="alert"></span>
+                </div>
+
+                <!-- Website Link -->
+                <div class="form-group">
+                  <label class="form-label" for="resLink">
+                    Website / Link
+                    <span class="form-label__optional">(optional)</span>
+                  </label>
+                  <input
+                    type="url"
+                    id="resLink"
+                    name="resLink"
+                    class="form-input"
+                    placeholder="https://example.org"
+                    autocomplete="url"
+                  />
+                  <span class="form-error" id="resLinkError" role="alert"></span>
+                </div>
+
+                <!-- Submitter Email -->
+                <div class="form-group">
+                  <label class="form-label" for="resEmail">
+                    Your Email <span class="required" aria-label="required">*</span>
+                  </label>
+                  <input
+                    type="email"
+                    id="resEmail"
+                    name="resEmail"
+                    class="form-input"
+                    placeholder="you@example.com"
+                    aria-required="true"
+                    autocomplete="email"
+                  />
+                  <span class="form-error" id="resEmailError" role="alert"></span>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="btn btn--primary btn--full">
+                  <i class="ri-send-plane-line" aria-hidden="true"></i>
+                  Submit for Review
+                </button>
+
+                <p class="form-note">
+                  <i class="ri-lock-line" aria-hidden="true"></i>
+                  Your email is only used for follow-up. We never share it.
+                </p>
+              </form>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- =============================================
+           BANNER / CTA STRIP
+           A full-width section encouraging action
+      ============================================= -->
+      <section class="cta-banner" aria-labelledby="cta-heading">
+        <div class="container cta-banner__inner">
+          <div class="cta-banner__text">
+            <h2 class="cta-banner__title" id="cta-heading">
+              Need immediate help?
+            </h2>
+            <p class="cta-banner__subtitle">
+              Loudoun County's 24/7 crisis line can connect you with emergency services.
+            </p>
+          </div>
+          <a
+            href="tel:+17037771940"
+            class="btn btn--white"
+            aria-label="Call Loudoun County Crisis Line at 703-777-1940"
+          >
+            <i class="ri-phone-fill" aria-hidden="true"></i>
+            (703) 777-1940
+          </a>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- =============================================
+         FOOTER
+    ============================================= -->
+    <footer class="footer" role="contentinfo">
+      <div class="container footer__inner">
+
+        <!-- Footer logo + mission blurb -->
+        <div class="footer__brand">
+          <a href="#" class="navbar__logo" aria-label="Loudoun County Resource Hub Home">
+            <span class="navbar__logo-icon" aria-hidden="true">
+              <i class="ri-community-line"></i>
+            </span>
+            <span class="navbar__logo-text">Loudoun County <strong>Resource Hub</strong></span>
+          </a>
+          <p class="footer__brand-text">
+            A community-built directory connecting Loudoun County residents
+            with the services and support they need.
+          </p>
+        </div>
+
+        <!-- Footer navigation links -->
+        <nav class="footer__nav" aria-label="Footer navigation">
+          <h3 class="footer__nav-title">Navigate</h3>
+          <ul class="footer__nav-list">
+            <li><a href="#highlights" class="footer__link">Featured Resources</a></li>
+            <li><a href="#directory" class="footer__link">Full Directory</a></li>
+            <li><a href="#submit" class="footer__link">Submit a Resource</a></li>
+            <li><a href="about.html" class="footer__link">About This Project</a></li>
+          </ul>
+        </nav>
+
+        <!-- Footer categories quick links -->
+        <nav class="footer__nav" aria-label="Categories navigation">
+          <h3 class="footer__nav-title">Categories</h3>
+          <ul class="footer__nav-list">
+            <li><a href="#directory" class="footer__link">Food Assistance</a></li>
+            <li><a href="#directory" class="footer__link">Health Services</a></li>
+            <li><a href="#directory" class="footer__link">Youth & Education</a></li>
+            <li><a href="#directory" class="footer__link">Housing & Shelter</a></li>
+            <li><a href="#directory" class="footer__link">Support Services</a></li>
+          </ul>
+        </nav>
+
+        <!-- Footer legal/compliance -->
+        <div class="footer__legal">
+          <h3 class="footer__nav-title">Compliance</h3>
+          <ul class="footer__nav-list">
+            <li>
+              <a href="/docs/copyright-checklist.pdf" class="footer__link" target="_blank">
+                <i class="ri-file-pdf-line" aria-hidden="true"></i>
+                Copyright Checklist
+              </a>
+            </li>
+            <li>
+              <a href="/docs/work-log.pdf" class="footer__link" target="_blank">
+                <i class="ri-file-pdf-line" aria-hidden="true"></i>
+                Work Log
+              </a>
+            </li>
+            <li>
+              <a href="references.html" class="footer__link">References</a>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+
+      <!-- Bottom bar -->
+      <div class="footer__bottom">
+        <div class="container footer__bottom-inner">
+          <p class="footer__copyright">
+            &copy; 2025–2026 Loudoun County Community Resource Hub.
+            Created for the TSA Webmaster Competition.
+          </p>
+          <p class="footer__tsa">
+            A <strong>Technology Student Association</strong> Competitive Entry
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- =============================================
+         BACK TO TOP BUTTON
+         Appears after user scrolls down 400px (controlled by JS)
+    ============================================= -->
+    <button
+      class="back-to-top"
+      id="backToTop"
+      aria-label="Back to top"
+      title="Back to top"
+      hidden
+    >
+      <i class="ri-arrow-up-line" aria-hidden="true"></i>
+    </button>
+
+    <!-- =============================================
+         SCRIPTS
+         type="module" allows us to use ES6 import/export
+         in main.js and data.js
+    ============================================= -->
     <script type="module" src="/src/main.js"></script>
   </body>
 </html>

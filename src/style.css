@@ -1,296 +1,2006 @@
+/* ================================================
+   ASHBURN COMMUNITY RESOURCE HUB
+   Main Stylesheet — style.css
+   
+   TABLE OF CONTENTS:
+   1.  CSS Custom Properties (Variables)
+   2.  CSS Reset & Base Styles
+   3.  Typography
+   4.  Utility Classes
+   5.  Layout & Container
+   6.  Animations & Keyframes
+   7.  Skip Link (Accessibility)
+   8.  Navbar
+   9.  Mobile Menu
+   10. Hero Section
+   11. Section Headers (reusable)
+   12. Highlights / Spotlight Cards
+   13. Interactive Directory
+   14. Resource Cards (injected by JS)
+   15. No Results State
+   16. Submission Form
+   17. CTA Banner
+   18. Footer
+   19. Back To Top Button
+   20. Dark Mode Overrides
+   21. Media Queries (Responsive)
+================================================ */
+
+
+/* ================================================
+   1. CSS CUSTOM PROPERTIES (VARIABLES)
+   
+   Using variables means we can change the entire
+   color scheme in ONE place. This also powers our
+   dark mode — we just redefine these variables
+   inside [data-theme="dark"] selector.
+================================================ */
 :root {
-  --text: #6b6375;
-  --text-h: #08060d;
-  --bg: #fff;
-  --border: #e5e4e7;
-  --code-bg: #f4f3ec;
-  --accent: #aa3bff;
-  --accent-bg: rgba(170, 59, 255, 0.1);
-  --accent-border: rgba(170, 59, 255, 0.5);
-  --social-bg: rgba(244, 243, 236, 0.5);
-  --shadow:
-    rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
+  /* --- Brand Colors --- */
+  --clr-primary:        #2563eb;   /* Main blue — buttons, links, accents */
+  --clr-primary-dark:   #1d4ed8;   /* Darker blue for hover states */
+  --clr-primary-light:  #dbeafe;   /* Very light blue for backgrounds */
+  --clr-accent:         #06b6d4;   /* Cyan accent for gradient effects */
+  --clr-accent-2:       #8b5cf6;   /* Purple for variety in cards */
 
-  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --mono: ui-monospace, Consolas, monospace;
+  /* --- Category Colors (each category gets a unique color) --- */
+  --clr-food:           #16a34a;   /* Green for food/nutrition */
+  --clr-food-light:     #dcfce7;
+  --clr-health:         #dc2626;   /* Red for health/medical */
+  --clr-health-light:   #fee2e2;
+  --clr-youth:          #d97706;   /* Amber for youth/education */
+  --clr-youth-light:    #fef3c7;
+  --clr-housing:        #7c3aed;   /* Purple for housing/shelter */
+  --clr-housing-light:  #ede9fe;
+  --clr-support:        #0891b2;   /* Teal for support services */
+  --clr-support-light:  #cffafe;
+  --clr-events:         #db2777;   /* Pink for community events */
+  --clr-events-light:   #fce7f3;
 
-  font: 18px/145% var(--sans);
-  letter-spacing: 0.18px;
-  color-scheme: light dark;
-  color: var(--text);
-  background: var(--bg);
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  /* --- Neutral Colors (Light Mode) --- */
+  --clr-bg:             #f8fafc;   /* Page background */
+  --clr-surface:        #ffffff;   /* Card backgrounds */
+  --clr-surface-2:      #f1f5f9;   /* Slightly darker surface */
+  --clr-border:         #e2e8f0;   /* Subtle borders */
+  --clr-border-hover:   #cbd5e1;   /* Border on hover */
 
-  @media (max-width: 1024px) {
-    font-size: 16px;
-  }
+  /* --- Text Colors (Light Mode) --- */
+  --clr-text-primary:   #0f172a;   /* Main body text — near black */
+  --clr-text-secondary: #475569;   /* Muted text */
+  --clr-text-tertiary:  #94a3b8;   /* Placeholder / hint text */
+  --clr-text-inverse:   #ffffff;   /* Text on dark backgrounds */
+
+  /* --- Semantic Colors --- */
+  --clr-success:        #16a34a;
+  --clr-success-light:  #dcfce7;
+  --clr-error:          #dc2626;
+  --clr-error-light:    #fee2e2;
+  --clr-warning:        #d97706;
+
+  /* --- Gradients --- */
+  --gradient-hero:      linear-gradient(135deg, #0f172a 0%, #1e3a5f 50%, #0c4a6e 100%);
+  --gradient-primary:   linear-gradient(135deg, var(--clr-primary) 0%, var(--clr-accent) 100%);
+  --gradient-card-food:   linear-gradient(135deg, #16a34a, #059669);
+  --gradient-card-youth:  linear-gradient(135deg, #d97706, #ea580c);
+  --gradient-card-health: linear-gradient(135deg, #dc2626, #9f1239);
+
+  /* --- Shadows --- */
+  --shadow-xs:   0 1px 2px rgba(0,0,0,0.05);
+  --shadow-sm:   0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md:   0 4px 6px rgba(0,0,0,0.07), 0 2px 4px rgba(0,0,0,0.05);
+  --shadow-lg:   0 10px 15px rgba(0,0,0,0.08), 0 4px 6px rgba(0,0,0,0.04);
+  --shadow-xl:   0 20px 25px rgba(0,0,0,0.10), 0 8px 10px rgba(0,0,0,0.04);
+  --shadow-glow: 0 0 40px rgba(37, 99, 235, 0.15);
+
+  /* --- Spacing Scale --- */
+  --space-1:   0.25rem;   /*  4px */
+  --space-2:   0.5rem;    /*  8px */
+  --space-3:   0.75rem;   /* 12px */
+  --space-4:   1rem;      /* 16px */
+  --space-5:   1.25rem;   /* 20px */
+  --space-6:   1.5rem;    /* 24px */
+  --space-8:   2rem;      /* 32px */
+  --space-10:  2.5rem;    /* 40px */
+  --space-12:  3rem;      /* 48px */
+  --space-16:  4rem;      /* 64px */
+  --space-20:  5rem;      /* 80px */
+  --space-24:  6rem;      /* 96px */
+
+  /* --- Border Radius --- */
+  --radius-sm:   0.375rem;   /*  6px */
+  --radius-md:   0.625rem;   /* 10px */
+  --radius-lg:   1rem;       /* 16px */
+  --radius-xl:   1.5rem;     /* 24px */
+  --radius-2xl:  2rem;       /* 32px */
+  --radius-full: 9999px;     /* pill shape */
+
+  /* --- Typography --- */
+  --font-sans:    'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-display: 'Playfair Display', Georgia, serif;
+
+  /* --- Transitions --- */
+  --transition-fast:   150ms ease;
+  --transition-normal: 250ms ease;
+  --transition-slow:   400ms ease;
+
+  /* --- Navbar Height (used for scroll offset calculations) --- */
+  --navbar-height: 72px;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --text: #9ca3af;
-    --text-h: #f3f4f6;
-    --bg: #16171d;
-    --border: #2e303a;
-    --code-bg: #1f2028;
-    --accent: #c084fc;
-    --accent-bg: rgba(192, 132, 252, 0.15);
-    --accent-border: rgba(192, 132, 252, 0.5);
-    --social-bg: rgba(47, 48, 58, 0.5);
-    --shadow:
-      rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
-  }
 
-  #social .button-icon {
-    filter: invert(1) brightness(2);
-  }
+/* ================================================
+   2. CSS RESET & BASE STYLES
+   
+   Removes browser inconsistencies so our design
+   looks the same in Chrome, Firefox, Safari, Edge.
+================================================ */
+
+/* Box-sizing: makes padding/border included in element width */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Smooth scrolling for the whole page — used by all anchor links */
+html {
+  scroll-behavior: smooth;
+  /* Offset scrolling so navbar doesn't cover the section header */
+  scroll-padding-top: var(--navbar-height);
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
-  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--clr-text-primary);
+  background-color: var(--clr-bg);
+  /* Smooth background color transition for dark mode toggle */
+  transition: background-color var(--transition-slow), color var(--transition-slow);
+  overflow-x: hidden;
 }
 
-h1,
-h2 {
-  font-family: var(--heading);
-  font-weight: 500;
-  color: var(--text-h);
+/* Remove default list styles */
+ul, ol { list-style: none; }
+
+/* Remove underlines from links, inherit color */
+a {
+  color: inherit;
+  text-decoration: none;
 }
 
-h1 {
-  font-size: 56px;
-  letter-spacing: -1.68px;
-  margin: 32px 0;
-  @media (max-width: 1024px) {
-    font-size: 36px;
-    margin: 20px 0;
-  }
+/* Make images responsive by default */
+img, picture, video, canvas, svg {
+  display: block;
+  max-width: 100%;
 }
-h2 {
-  font-size: 24px;
-  line-height: 118%;
-  letter-spacing: -0.24px;
-  margin: 0 0 8px;
-  @media (max-width: 1024px) {
-    font-size: 20px;
-  }
+
+/* Buttons: reset browser defaults */
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
 }
+
+/* Form elements inherit font */
+input, textarea, select, button {
+  font-family: inherit;
+  font-size: inherit;
+}
+
+/* Focus visible: accessibility ring for keyboard navigation */
+:focus-visible {
+  outline: 3px solid var(--clr-primary);
+  outline-offset: 3px;
+  border-radius: var(--radius-sm);
+}
+
+/* Remove focus ring for mouse users (it only shows for keyboard) */
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+
+/* ================================================
+   3. TYPOGRAPHY
+================================================ */
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--clr-text-primary);
+  transition: color var(--transition-slow);
+}
+
 p {
-  margin: 0;
+  color: var(--clr-text-secondary);
+  transition: color var(--transition-slow);
 }
 
-code,
-.counter {
-  font-family: var(--mono);
-  display: inline-flex;
-  border-radius: 4px;
-  color: var(--text-h);
+strong { font-weight: 600; }
+
+
+/* ================================================
+   4. UTILITY CLASSES
+================================================ */
+
+/* Screen-reader only: visually hidden but accessible to screen readers */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
-code {
-  font-size: 15px;
-  line-height: 135%;
-  padding: 4px 8px;
-  background: var(--code-bg);
+/* Required field asterisk */
+.required {
+  color: var(--clr-error);
+  margin-left: 2px;
 }
 
-.counter {
-  font-size: 16px;
-  padding: 5px 10px;
-  border-radius: 5px;
-  color: var(--accent);
-  background: var(--accent-bg);
-  border: 2px solid transparent;
-  transition: border-color 0.3s;
-  margin-bottom: 24px;
 
-  &:hover {
-    border-color: var(--accent-border);
+/* ================================================
+   5. LAYOUT & CONTAINER
+   
+   .container: centers content and sets max-width
+   Used on every section to keep things aligned
+================================================ */
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin-inline: auto;     /* centers horizontally */
+  padding-inline: var(--space-6);  /* side padding on small screens */
+}
+
+
+/* ================================================
+   6. ANIMATIONS & KEYFRAMES
+   
+   All animations use 'animation-fill-mode: both'
+   so elements start in their initial (hidden) state
+   before the animation plays.
+   
+   JS adds the class 'is-visible' when elements enter
+   the viewport (using IntersectionObserver).
+================================================ */
+
+/* Fade up: elements start below and fade into position */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
   }
-  &:focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: 2px;
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
+/* Fade in: simple opacity transition */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* Blob pulse: the hero background shapes slowly breathe */
+@keyframes blobPulse {
+  0%, 100% { transform: scale(1) rotate(0deg); }
+  33%       { transform: scale(1.05) rotate(5deg); }
+  66%       { transform: scale(0.97) rotate(-3deg); }
+}
+
+/* Shimmer: loading skeleton animation */
+@keyframes shimmer {
+  from { background-position: -400px 0; }
+  to   { background-position: 400px 0; }
+}
+
+/* Bounce arrow: the hero scroll indicator bounces */
+@keyframes bounceArrow {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(6px); }
+}
+
+/* Spin: used on the loading indicator */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ---
+   animate-fade-up:
+   Applied to hero elements in HTML.
+   Each one has an increasing animation-delay
+   so they appear one after another (staggered).
+--- */
+.animate-fade-up {
+  opacity: 0;                    /* starts invisible */
+  animation: fadeUp 0.7s ease forwards;
+}
+
+/* Stagger delays for hero elements — each one waits a bit longer */
+.animate-fade-up:nth-child(1) { animation-delay: 0.1s; }
+.animate-fade-up:nth-child(2) { animation-delay: 0.25s; }
+.animate-fade-up:nth-child(3) { animation-delay: 0.4s; }
+.animate-fade-up:nth-child(4) { animation-delay: 0.55s; }
+.animate-fade-up:nth-child(5) { animation-delay: 0.7s; }
+
+/* ---
+   Scroll-triggered animations:
+   Elements with .reveal start invisible.
+   JS adds .is-visible when they enter the viewport.
+--- */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Stagger delays for grid items revealed together */
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+
+
+/* ================================================
+   7. SKIP LINK (ACCESSIBILITY)
+   
+   Hidden off-screen until focused by keyboard.
+   Required for WCAG 2.1 compliance.
+================================================ */
+.skip-link {
+  position: fixed;
+  top: -100%;
+  left: var(--space-4);
+  z-index: 9999;
+  padding: var(--space-3) var(--space-5);
+  background: var(--clr-primary);
+  color: #fff;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: 0.875rem;
+  transition: top var(--transition-fast);
+}
+
+/* Show the skip link when it receives keyboard focus */
+.skip-link:focus {
+  top: var(--space-4);
+}
+
+
+/* ================================================
+   8. NAVBAR
+   
+   Structure:
+   - .navbar: fixed at top, full width
+   - .navbar__inner: flex row with logo + nav + actions
+   - Becomes opaque with shadow when user scrolls
+     (JS adds .scrolled class)
+================================================ */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  height: var(--navbar-height);
+  /* Glass effect: semi-transparent with blur */
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid transparent;
+  transition:
+    background var(--transition-normal),
+    border-color var(--transition-normal),
+    box-shadow var(--transition-normal);
+}
+
+/* When user scrolls, navbar becomes more opaque with a shadow */
+.navbar.scrolled {
+  background: rgba(255, 255, 255, 0.96);
+  border-bottom-color: var(--clr-border);
+  box-shadow: var(--shadow-sm);
+}
+
+.navbar__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+  gap: var(--space-6);
+}
+
+/* --- Logo --- */
+.navbar__logo {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-shrink: 0;
+  text-decoration: none;
+}
+
+.navbar__logo-icon {
+  width: 36px;
+  height: 36px;
+  background: var(--gradient-primary);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.navbar__logo-text {
+  font-size: 1.125rem;
+  color: var(--clr-text-primary);
+  letter-spacing: -0.01em;
+  transition: color var(--transition-slow);
+}
+
+.navbar__logo-text strong {
+  color: var(--clr-primary);
+}
+
+/* --- Desktop Nav Links --- */
+.navbar__nav {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  /* Hidden on mobile — shown via media query */
+}
+
+.navbar__link {
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-sm);
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--clr-text-secondary);
+  transition: color var(--transition-fast), background var(--transition-fast);
+  white-space: nowrap;
+}
+
+.navbar__link:hover {
+  color: var(--clr-primary);
+  background: var(--clr-primary-light);
+}
+
+/* --- Navbar Action Buttons --- */
+.navbar__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-shrink: 0;
+}
+
+/* Icon-only circular button (dark mode toggle + hamburger) */
+.btn-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  color: var(--clr-text-secondary);
+  border: 1px solid var(--clr-border);
+  background: var(--clr-surface);
+  transition:
+    color var(--transition-fast),
+    background var(--transition-fast),
+    border-color var(--transition-fast),
+    transform var(--transition-fast);
+  cursor: pointer;
+}
+
+.btn-icon:hover {
+  color: var(--clr-primary);
+  background: var(--clr-primary-light);
+  border-color: var(--clr-primary);
+  transform: scale(1.05);
+}
+
+/* Hide hamburger on desktop */
+.hamburger { display: none; }
+
+
+/* ================================================
+   9. MOBILE MENU
+   
+   Hidden by default. JS toggles .is-open class
+   which slides it down into view.
+================================================ */
+.mobile-menu {
+  position: absolute;
+  top: var(--navbar-height);
+  left: 0;
+  right: 0;
+  background: var(--clr-surface);
+  border-bottom: 1px solid var(--clr-border);
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-3) var(--space-4);
+  gap: var(--space-1);
+  /* Hidden state: moved up and invisible */
+  transform: translateY(-10px);
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    transform var(--transition-normal),
+    opacity var(--transition-normal);
+}
+
+/* Open state: JS adds .is-open to show the menu */
+.mobile-menu.is-open {
+  transform: translateY(0);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.mobile-menu__link {
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--clr-text-secondary);
+  transition: color var(--transition-fast), background var(--transition-fast);
+}
+
+.mobile-menu__link:hover {
+  color: var(--clr-primary);
+  background: var(--clr-primary-light);
+}
+
+
+/* ================================================
+   10. HERO SECTION
+   
+   Full-viewport height section with:
+   - Dark gradient background
+   - Three animated "blob" shapes
+   - Centered content with staggered animations
+   - Floating stat cards
+   - Scroll indicator arrow
+================================================ */
 .hero {
   position: relative;
-
-  .base,
-  .framework,
-  .vite {
-    inset-inline: 0;
-    margin: 0 auto;
-  }
-
-  .base {
-    width: 170px;
-    position: relative;
-    z-index: 0;
-  }
-
-  .framework,
-  .vite {
-    position: absolute;
-  }
-
-  .framework {
-    z-index: 1;
-    top: 34px;
-    height: 28px;
-    transform: perspective(2000px) rotateZ(300deg) rotateX(44deg) rotateY(39deg)
-      scale(1.4);
-  }
-
-  .vite {
-    z-index: 0;
-    top: 107px;
-    height: 26px;
-    width: auto;
-    transform: perspective(2000px) rotateZ(300deg) rotateX(40deg) rotateY(39deg)
-      scale(0.8);
-  }
+  min-height: 100vh;
+  background: var(--gradient-hero);
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  /* Push content below navbar */
+  padding-top: var(--navbar-height);
 }
 
-#app {
-  width: 1126px;
-  max-width: 100%;
-  margin: 0 auto;
+/* --- Decorative Background Blobs ---
+   These are large, blurry colored circles that
+   sit behind the content and slowly animate.
+   aria-hidden in HTML so screen readers skip them.
+*/
+.hero__blob {
+  position: absolute;
+  border-radius: var(--radius-full);
+  filter: blur(80px);
+  opacity: 0.15;
+  animation: blobPulse 10s ease-in-out infinite;
+}
+
+.hero__blob--1 {
+  width: 600px;
+  height: 600px;
+  background: var(--clr-primary);
+  top: -200px;
+  right: -100px;
+  animation-delay: 0s;
+}
+
+.hero__blob--2 {
+  width: 400px;
+  height: 400px;
+  background: var(--clr-accent);
+  bottom: -100px;
+  left: -50px;
+  animation-delay: -3s;
+}
+
+.hero__blob--3 {
+  width: 300px;
+  height: 300px;
+  background: var(--clr-accent-2);
+  top: 40%;
+  left: 40%;
+  animation-delay: -6s;
+}
+
+/* --- Hero Content Container --- */
+.hero__content {
+  position: relative;    /* sits above the blobs */
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   text-align: center;
-  border-inline: 1px solid var(--border);
-  min-height: 100svh;
-  display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
+  padding-block: var(--space-20);
+  gap: var(--space-6);
 }
 
-#center {
-  display: flex;
-  flex-direction: column;
-  gap: 25px;
-  place-content: center;
-  place-items: center;
-  flex-grow: 1;
-
-  @media (max-width: 1024px) {
-    padding: 32px 20px 24px;
-    gap: 18px;
-  }
+/* --- Location Badge Pill --- */
+.hero__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-5);
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-full);
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  backdrop-filter: blur(8px);
 }
 
-#next-steps {
+.hero__badge i {
+  color: var(--clr-accent);
+  font-size: 0.9rem;
+}
+
+/* --- Main Heading --- */
+.hero__heading {
+  font-family: var(--font-display);
+  font-size: clamp(2.8rem, 7vw, 5.5rem);
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  max-width: 800px;
+}
+
+/* The "Connected." part of the heading gets a gradient color */
+.hero__heading-accent {
+  /* Gradient text: background-clip technique */
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* --- Subtext --- */
+.hero__subtext {
+  font-size: clamp(1rem, 2.5vw, 1.2rem);
+  color: rgba(255, 255, 255, 0.75);
+  max-width: 580px;
+  line-height: 1.7;
+}
+
+/* --- CTA Button Group --- */
+.hero__cta {
   display: flex;
-  border-top: 1px solid var(--border);
+  gap: var(--space-4);
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+
+/* ================================================
+   BUTTON STYLES (used site-wide)
+================================================ */
+
+/* Base button: shared styles for all .btn variants */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-6);
+  border-radius: var(--radius-full);
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition:
+    background var(--transition-fast),
+    color var(--transition-fast),
+    border-color var(--transition-fast),
+    transform var(--transition-fast),
+    box-shadow var(--transition-fast);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+}
+
+.btn:active {
+  transform: translateY(0);
+}
+
+/* Primary: solid blue fill */
+.btn--primary {
+  background: var(--clr-primary);
+  color: #ffffff;
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
+}
+
+.btn--primary:hover {
+  background: var(--clr-primary-dark);
+  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.45);
+}
+
+/* Secondary: transparent with border */
+.btn--secondary {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(8px);
+}
+
+.btn--secondary:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+/* White: solid white (used on dark backgrounds) */
+.btn--white {
+  background: #ffffff;
+  color: var(--clr-primary);
+  box-shadow: var(--shadow-lg);
+}
+
+.btn--white:hover {
+  background: var(--clr-primary-light);
+  box-shadow: var(--shadow-xl);
+}
+
+/* Full width button */
+.btn--full {
+  width: 100%;
+}
+
+/* --- Stat Cards (inside hero) --- */
+.hero__stats {
+  display: flex;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: var(--space-4);
+}
+
+.stat-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--space-4) var(--space-6);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: var(--radius-xl);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  min-width: 110px;
+  transition: background var(--transition-fast), transform var(--transition-fast);
+}
+
+.stat-card:hover {
+  background: rgba(255, 255, 255, 0.14);
+  transform: translateY(-3px);
+}
+
+.stat-card__number {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1;
+}
+
+.stat-card__label {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.65);
+  margin-top: var(--space-1);
+  text-align: center;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* --- Scroll Indicator Arrow --- */
+.hero__scroll-indicator {
+  position: absolute;
+  bottom: var(--space-8);
+  left: 50%;
+  transform: translateX(-50%);
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-full);
+  border: 1px solid rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255,255,255,0.7);
+  font-size: 1.4rem;
+  animation: bounceArrow 2s ease-in-out infinite;
+  transition: background var(--transition-fast);
+}
+
+.hero__scroll-indicator:hover {
+  background: rgba(255,255,255,0.15);
+}
+
+
+/* ================================================
+   11. SECTION HEADERS (REUSABLE)
+   
+   Every major section uses the same header pattern:
+   - Small label pill above the title
+   - Large section title
+   - Muted subtitle/description
+================================================ */
+.section-header {
+  text-align: center;
+  margin-bottom: var(--space-12);
+}
+
+/* Small colored pill label above headings */
+.section-label {
+  display: inline-block;
+  padding: var(--space-1) var(--space-4);
+  background: var(--clr-primary-light);
+  color: var(--clr-primary);
+  border-radius: var(--radius-full);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: var(--space-4);
+  transition: background var(--transition-slow), color var(--transition-slow);
+}
+
+.section-title {
+  font-size: clamp(1.8rem, 4vw, 2.75rem);
+  font-weight: 800;
+  color: var(--clr-text-primary);
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  margin-bottom: var(--space-4);
+  font-family: var(--font-display);
+}
+
+.section-subtitle {
+  font-size: 1.05rem;
+  color: var(--clr-text-secondary);
+  max-width: 560px;
+  margin-inline: auto;
+  line-height: 1.7;
+}
+
+
+/* ================================================
+   12. HIGHLIGHTS / SPOTLIGHT CARDS
+   
+   Three large feature cards showing the most
+   important community resources.
+   
+   Layout: CSS Grid, 3 columns on desktop,
+   1 column on mobile (stacked)
+================================================ */
+.highlights {
+  padding-block: var(--space-24);
+  background: var(--clr-surface);
+}
+
+/* Three equal columns, with gap */
+.highlights__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-6);
+}
+
+/* --- Individual Highlight Card --- */
+.highlight-card {
+  background: var(--clr-surface);
+  border: 1px solid var(--clr-border);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow-sm);
+  transition:
+    transform var(--transition-normal),
+    box-shadow var(--transition-normal),
+    border-color var(--transition-normal);
+}
+
+.highlight-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-xl);
+  border-color: var(--clr-border-hover);
+}
+
+/* --- Icon Wrap: the colored banner at the top of each card --- */
+.highlight-card__icon-wrap {
+  height: 130px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+  color: rgba(255, 255, 255, 0.9);
+  flex-shrink: 0;
+}
+
+/* Each card type gets its own gradient banner color */
+.highlight-card--food   .highlight-card__icon-wrap { background: var(--gradient-card-food); }
+.highlight-card--youth  .highlight-card__icon-wrap { background: var(--gradient-card-youth); }
+.highlight-card--health .highlight-card__icon-wrap { background: var(--gradient-card-health); }
+
+/* --- Card Content Area --- */
+.highlight-card__content {
+  padding: var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  flex: 1;
+}
+
+/* Category badge */
+.highlight-card__category {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.highlight-card--food   .highlight-card__category { color: var(--clr-food); }
+.highlight-card--youth  .highlight-card__category { color: var(--clr-youth); }
+.highlight-card--health .highlight-card__category { color: var(--clr-health); }
+
+.highlight-card__title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--clr-text-primary);
+  line-height: 1.3;
+}
+
+.highlight-card__desc {
+  font-size: 0.9rem;
+  color: var(--clr-text-secondary);
+  line-height: 1.65;
+  flex: 1;
+}
+
+/* Details list (phone, hours, address) */
+.highlight-card__details {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding-top: var(--space-2);
+  border-top: 1px solid var(--clr-border);
+}
+
+.highlight-card__details li {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  font-size: 0.85rem;
+  color: var(--clr-text-secondary);
+}
+
+.highlight-card__details li i {
+  font-size: 0.9rem;
+  margin-top: 3px;
+  flex-shrink: 0;
+  color: var(--clr-text-tertiary);
+}
+
+/* "Visit Website" link at bottom of card */
+.highlight-card__link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--clr-primary);
+  margin-top: auto;
+  padding-top: var(--space-3);
+  transition: gap var(--transition-fast), color var(--transition-fast);
+}
+
+.highlight-card__link:hover {
+  color: var(--clr-primary-dark);
+  gap: var(--space-3);
+}
+
+
+/* ================================================
+   13. INTERACTIVE DIRECTORY
+   
+   Layout:
+   - .directory__controls: search + filter controls
+   - .search-wrap: the search input with icon
+   - .filter-buttons: the category filter pill buttons
+   - .resource-grid: where JS injects resource cards
+================================================ */
+.directory {
+  padding-block: var(--space-24);
+  background: var(--clr-bg);
+}
+
+/* --- Controls Bar (search + filters) --- */
+.directory__controls {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  margin-bottom: var(--space-10);
+}
+
+/* --- Search Input Wrapper --- */
+.search-wrap {
+  position: relative;
+  max-width: 560px;
+  margin-inline: auto;
+  width: 100%;
+}
+
+/* Magnifying glass icon inside the input */
+.search-wrap__icon {
+  position: absolute;
+  left: var(--space-4);
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--clr-text-tertiary);
+  font-size: 1.1rem;
+  pointer-events: none;   /* click passes through to input */
+  transition: color var(--transition-fast);
+}
+
+/* When input is focused, icon turns blue */
+.search-wrap:focus-within .search-wrap__icon {
+  color: var(--clr-primary);
+}
+
+/* The actual search input field */
+.search-input {
+  width: 100%;
+  height: 52px;
+  padding: 0 var(--space-10) 0 var(--space-10);
+  border: 2px solid var(--clr-border);
+  border-radius: var(--radius-full);
+  background: var(--clr-surface);
+  color: var(--clr-text-primary);
+  font-size: 0.95rem;
+  transition:
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast),
+    background var(--transition-slow);
+}
+
+/* Remove the default browser clear button for search inputs */
+.search-input::-webkit-search-cancel-button { display: none; }
+
+.search-input::placeholder { color: var(--clr-text-tertiary); }
+
+.search-input:focus {
+  outline: none;
+  border-color: var(--clr-primary);
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
+}
+
+/* Custom clear button (shown by JS when input has value) */
+.search-clear {
+  position: absolute;
+  right: var(--space-4);
+  top: 50%;
+  transform: translateY(-50%);
+  width: 24px;
+  height: 24px;
+  border-radius: var(--radius-full);
+  background: var(--clr-text-tertiary);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  transition: background var(--transition-fast), transform var(--transition-fast);
+}
+
+.search-clear:hover {
+  background: var(--clr-text-secondary);
+  transform: translateY(-50%) scale(1.1);
+}
+
+/* --- Category Filter Buttons --- */
+.filter-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  justify-content: center;
+}
+
+/* Individual filter button */
+.filter-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-full);
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--clr-text-secondary);
+  background: var(--clr-surface);
+  border: 1.5px solid var(--clr-border);
+  cursor: pointer;
+  transition:
+    color var(--transition-fast),
+    background var(--transition-fast),
+    border-color var(--transition-fast),
+    transform var(--transition-fast);
+  white-space: nowrap;
+}
+
+.filter-btn:hover {
+  color: var(--clr-primary);
+  background: var(--clr-primary-light);
+  border-color: var(--clr-primary);
+  transform: translateY(-1px);
+}
+
+/* Active filter button: filled blue */
+.filter-btn.active {
+  color: #ffffff;
+  background: var(--clr-primary);
+  border-color: var(--clr-primary);
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
+}
+
+.filter-btn.active:hover {
+  background: var(--clr-primary-dark);
+}
+
+/* --- Results Count --- */
+.directory__count {
+  text-align: center;
+  font-size: 0.875rem;
+  color: var(--clr-text-tertiary);
+}
+
+.directory__count strong {
+  color: var(--clr-primary);
+  font-weight: 700;
+}
+
+/* --- Resource Cards Grid ---
+   auto-fill: creates as many columns as will fit
+   minmax(300px, 1fr): each column is at least 300px wide
+   This gives us responsive columns without media queries!
+*/
+.resource-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: var(--space-5);
+}
+
+
+/* ================================================
+   14. RESOURCE CARDS (injected by JavaScript)
+   
+   These cards are created dynamically by JS.
+   The JS creates a <article> element, adds these
+   classes, and fills in the content from data.js
+================================================ */
+
+/* The card container */
+.resource-card {
+  background: var(--clr-surface);
+  border: 1px solid var(--clr-border);
+  border-radius: var(--radius-xl);
+  padding: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  box-shadow: var(--shadow-xs);
+  transition:
+    transform var(--transition-normal),
+    box-shadow var(--transition-normal),
+    border-color var(--transition-normal);
+  /* Cards start invisible and fade in (JS adds 'visible' class) */
+  opacity: 0;
+  transform: translateY(12px);
+}
+
+/* When JS adds .visible, the card fades into view */
+.resource-card.visible {
+  opacity: 1;
+  transform: translateY(0);
+  transition:
+    opacity 0.4s ease,
+    transform 0.4s ease,
+    box-shadow var(--transition-normal),
+    border-color var(--transition-normal);
+}
+
+.resource-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--clr-border-hover);
+}
+
+/* Card header: category badge + icon on the right */
+.resource-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Colored category badge */
+.resource-card__badge {
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-full);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* Badge colors per category — set via JS using data-category */
+.badge--food      { background: var(--clr-food-light);    color: var(--clr-food); }
+.badge--health    { background: var(--clr-health-light);  color: var(--clr-health); }
+.badge--youth     { background: var(--clr-youth-light);   color: var(--clr-youth); }
+.badge--housing   { background: var(--clr-housing-light); color: var(--clr-housing); }
+.badge--support   { background: var(--clr-support-light); color: var(--clr-support); }
+.badge--events    { background: var(--clr-events-light);  color: var(--clr-events); }
+
+/* Category icon circle */
+.resource-card__icon {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+/* Icon backgrounds per category */
+.icon--food    { background: var(--clr-food-light);    color: var(--clr-food); }
+.icon--health  { background: var(--clr-health-light);  color: var(--clr-health); }
+.icon--youth   { background: var(--clr-youth-light);   color: var(--clr-youth); }
+.icon--housing { background: var(--clr-housing-light); color: var(--clr-housing); }
+.icon--support { background: var(--clr-support-light); color: var(--clr-support); }
+.icon--events  { background: var(--clr-events-light);  color: var(--clr-events); }
+
+/* Resource name / title */
+.resource-card__name {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--clr-text-primary);
+  line-height: 1.3;
+  transition: color var(--transition-slow);
+}
+
+/* Short description */
+.resource-card__desc {
+  font-size: 0.875rem;
+  color: var(--clr-text-secondary);
+  line-height: 1.6;
+  flex: 1;
+  /* Clamp to 3 lines with ellipsis to keep cards uniform height */
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Phone + address row */
+.resource-card__meta {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--clr-border);
+}
+
+.resource-card__meta-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: 0.8rem;
+  color: var(--clr-text-tertiary);
+}
+
+.resource-card__meta-item i {
+  font-size: 0.85rem;
+  flex-shrink: 0;
+}
+
+/* Visit website link at bottom */
+.resource-card__link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: 0.825rem;
+  font-weight: 600;
+  color: var(--clr-primary);
+  margin-top: var(--space-2);
+  transition: gap var(--transition-fast);
+}
+
+.resource-card__link:hover {
+  color: var(--clr-primary-dark);
+  gap: var(--space-2);
+}
+
+
+/* ================================================
+   15. NO RESULTS STATE
+================================================ */
+.no-results {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: var(--space-20) var(--space-4);
+  gap: var(--space-4);
+}
+
+.no-results__icon {
+  font-size: 4rem;
+  color: var(--clr-text-tertiary);
+}
+
+.no-results__title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--clr-text-primary);
+}
+
+.no-results__text {
+  font-size: 0.95rem;
+  color: var(--clr-text-secondary);
+  max-width: 340px;
+}
+
+/* No results "reset" button needs dark text */
+.no-results .btn--secondary {
+  color: var(--clr-text-secondary);
+  background: var(--clr-surface-2);
+  border-color: var(--clr-border);
+}
+
+.no-results .btn--secondary:hover {
+  color: var(--clr-primary);
+  background: var(--clr-primary-light);
+  border-color: var(--clr-primary);
+}
+
+
+/* ================================================
+   16. SUBMISSION FORM
+   
+   Layout: two columns on desktop (info + form card)
+   Stacked on mobile
+================================================ */
+.submit-section {
+  padding-block: var(--space-24);
+  background: var(--clr-surface);
+}
+
+/* Two-column layout */
+.submit-section__inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-16);
+  align-items: start;
+}
+
+/* Left column: text content */
+.submit-section__info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.submit-section__info .section-title {
   text-align: left;
+  font-size: clamp(1.6rem, 3vw, 2.25rem);
+}
 
-  & > div {
-    flex: 1 1 0;
-    padding: 32px;
-    @media (max-width: 1024px) {
-      padding: 24px 20px;
-    }
+.submit-section__info .section-subtitle {
+  text-align: left;
+  margin-inline: 0;
+}
+
+/* Checklist of accepted submissions */
+.submit-section__checklist {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin-top: var(--space-2);
+}
+
+.submit-section__checklist li {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-size: 0.9rem;
+  color: var(--clr-text-secondary);
+  font-weight: 500;
+}
+
+.submit-section__checklist li i {
+  color: var(--clr-success);
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+
+/* --- Form Card (right column) --- */
+.form-card {
+  background: var(--clr-surface);
+  border: 1px solid var(--clr-border);
+  border-radius: var(--radius-2xl);
+  padding: var(--space-8);
+  box-shadow: var(--shadow-lg);
+  transition: background var(--transition-slow), border-color var(--transition-slow);
+}
+
+.form-card__title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--clr-text-primary);
+  margin-bottom: var(--space-6);
+}
+
+/* --- Form Groups --- */
+.resource-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.form-label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--clr-text-primary);
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  transition: color var(--transition-slow);
+}
+
+.form-label__optional {
+  font-size: 0.75rem;
+  font-weight: 400;
+  color: var(--clr-text-tertiary);
+}
+
+/* All input, select, and textarea share these base styles */
+.form-input {
+  width: 100%;
+  padding: var(--space-3) var(--space-4);
+  border: 2px solid var(--clr-border);
+  border-radius: var(--radius-md);
+  background: var(--clr-bg);
+  color: var(--clr-text-primary);
+  font-size: 0.925rem;
+  transition:
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast),
+    background var(--transition-slow);
+}
+
+.form-input::placeholder {
+  color: var(--clr-text-tertiary);
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--clr-primary);
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
+  background: var(--clr-surface);
+}
+
+/* Invalid state: shown by JS when validation fails */
+.form-input.is-invalid {
+  border-color: var(--clr-error);
+  box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.1);
+}
+
+.form-select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 18px;
+  padding-right: var(--space-10);
+  cursor: pointer;
+}
+
+.form-textarea {
+  resize: vertical;
+  min-height: 110px;
+  line-height: 1.6;
+}
+
+/* Inline error message */
+.form-error {
+  font-size: 0.8rem;
+  color: var(--clr-error);
+  font-weight: 500;
+  min-height: 1.2em;
+  /* Shows when JS sets textContent on it */
+}
+
+/* Privacy note below submit button */
+.form-note {
+  font-size: 0.78rem;
+  color: var(--clr-text-tertiary);
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-1);
+  margin-top: var(--space-1);
+}
+
+/* --- Success Message (shown by JS after valid submission) --- */
+.form-success {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--space-4);
+  padding: var(--space-8) 0;
+}
+
+.form-success__icon {
+  font-size: 3.5rem;
+  color: var(--clr-success);
+}
+
+.form-success__title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--clr-text-primary);
+}
+
+.form-success__text {
+  font-size: 0.95rem;
+  color: var(--clr-text-secondary);
+  max-width: 320px;
+}
+
+.form-success .btn--primary {
+  margin-top: var(--space-2);
+}
+
+
+/* ================================================
+   17. CTA BANNER
+================================================ */
+.cta-banner {
+  background: var(--gradient-primary);
+  padding-block: var(--space-12);
+}
+
+.cta-banner__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-8);
+  flex-wrap: wrap;
+}
+
+.cta-banner__title {
+  font-size: clamp(1.4rem, 3vw, 2rem);
+  font-weight: 800;
+  color: #ffffff;
+  margin-bottom: var(--space-2);
+  font-family: var(--font-display);
+}
+
+.cta-banner__subtitle {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+
+/* ================================================
+   18. FOOTER
+================================================ */
+.footer {
+  background: var(--clr-text-primary);
+  color: rgba(255, 255, 255, 0.7);
+  padding-top: var(--space-16);
+  transition: background var(--transition-slow);
+}
+
+.footer__inner {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: var(--space-10);
+  padding-bottom: var(--space-12);
+}
+
+/* Footer brand column */
+.footer__brand {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.footer__brand .navbar__logo-text {
+  color: #ffffff;
+}
+
+.footer__brand-text {
+  font-size: 0.875rem;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+/* Footer nav columns */
+.footer__nav-title {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.4);
+  margin-bottom: var(--space-4);
+}
+
+.footer__nav-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.footer__link {
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.6);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  transition: color var(--transition-fast);
+}
+
+.footer__link:hover {
+  color: #ffffff;
+}
+
+/* Footer bottom bar */
+.footer__bottom {
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding-block: var(--space-5);
+}
+
+.footer__bottom-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+.footer__copyright,
+.footer__tsa {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.35);
+}
+
+.footer__tsa strong {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+
+/* ================================================
+   19. BACK TO TOP BUTTON
+   
+   Fixed position, bottom right.
+   JS shows/hides based on scroll position.
+================================================ */
+.back-to-top {
+  position: fixed;
+  bottom: var(--space-8);
+  right: var(--space-8);
+  z-index: 900;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-full);
+  background: var(--clr-primary);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  box-shadow: var(--shadow-lg);
+  cursor: pointer;
+  border: none;
+  /* Entrance animation */
+  opacity: 0;
+  transform: translateY(12px);
+  transition:
+    opacity var(--transition-normal),
+    transform var(--transition-normal),
+    background var(--transition-fast);
+}
+
+/* JS removes 'hidden' and adds 'visible' class */
+.back-to-top.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.back-to-top:hover {
+  background: var(--clr-primary-dark);
+  transform: translateY(-3px);
+}
+
+
+/* ================================================
+   20. DARK MODE OVERRIDES
+   
+   When JS adds data-theme="dark" to <html>,
+   we redefine all our CSS variables.
+   Because everything uses variables, the ENTIRE
+   site switches colors automatically — no need to
+   touch individual elements!
+================================================ */
+[data-theme="dark"] {
+  /* Page backgrounds */
+  --clr-bg:             #0f172a;
+  --clr-surface:        #1e293b;
+  --clr-surface-2:      #334155;
+  --clr-border:         #334155;
+  --clr-border-hover:   #475569;
+
+  /* Text */
+  --clr-text-primary:   #f1f5f9;
+  --clr-text-secondary: #94a3b8;
+  --clr-text-tertiary:  #64748b;
+
+  /* Brand (slightly brighter for dark bg) */
+  --clr-primary:        #3b82f6;
+  --clr-primary-dark:   #2563eb;
+  --clr-primary-light:  rgba(59, 130, 246, 0.15);
+
+  /* Shadows (darker in dark mode) */
+  --shadow-xs:  0 1px 2px rgba(0,0,0,0.3);
+  --shadow-sm:  0 1px 3px rgba(0,0,0,0.4), 0 1px 2px rgba(0,0,0,0.2);
+  --shadow-md:  0 4px 6px rgba(0,0,0,0.35), 0 2px 4px rgba(0,0,0,0.2);
+  --shadow-lg:  0 10px 15px rgba(0,0,0,0.4), 0 4px 6px rgba(0,0,0,0.2);
+  --shadow-xl:  0 20px 25px rgba(0,0,0,0.5), 0 8px 10px rgba(0,0,0,0.2);
+}
+
+/* Navbar dark mode glass */
+[data-theme="dark"] .navbar {
+  background: rgba(15, 23, 42, 0.85);
+}
+
+[data-theme="dark"] .navbar.scrolled {
+  background: rgba(15, 23, 42, 0.97);
+}
+
+/* Dark mode: section label pill */
+[data-theme="dark"] .section-label {
+  background: rgba(59, 130, 246, 0.2);
+  color: #60a5fa;
+}
+
+/* Dark mode: footer stays dark (already is) */
+[data-theme="dark"] .footer {
+  background: #020617;
+}
+
+/* Dark mode: dark mode toggle icon switches */
+[data-theme="dark"] #darkModeIcon::before {
+  content: "\f1b2";  /* ri-sun-line codepoint */
+}
+
+
+/* ================================================
+   21. MEDIA QUERIES (RESPONSIVE DESIGN)
+   
+   We use a mobile-first approach:
+   - Base styles work on mobile (smallest screens)
+   - Media queries ADD styles for larger screens
+   
+   Breakpoints:
+   - sm:  480px  (large phones)
+   - md:  768px  (tablets)
+   - lg:  1024px (small laptops)
+   - xl:  1200px (desktops)
+================================================ */
+
+/* --- Tablet and below (max-width: 1024px) --- */
+@media (max-width: 1024px) {
+  /* Footer: 2 column layout instead of 4 */
+  .footer__inner {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-8);
+  }
+}
+
+/* --- Tablet (max-width: 900px) --- */
+@media (max-width: 900px) {
+  /* Highlights: stack to 1 column */
+  .highlights__grid {
+    grid-template-columns: 1fr;
+    max-width: 540px;
+    margin-inline: auto;
   }
 
-  .icon {
-    margin-bottom: 16px;
-    width: 22px;
-    height: 22px;
+  /* Form: stack to single column */
+  .submit-section__inner {
+    grid-template-columns: 1fr;
+    gap: var(--space-10);
   }
 
-  @media (max-width: 1024px) {
+  .submit-section__info .section-title,
+  .submit-section__info .section-subtitle {
+    text-align: center;
+  }
+
+  .submit-section__info {
+    align-items: center;
+    text-align: center;
+  }
+
+  .submit-section__checklist {
+    align-items: flex-start;
+    width: 100%;
+    max-width: 360px;
+  }
+}
+
+/* --- Mobile (max-width: 768px) --- */
+@media (max-width: 768px) {
+  :root {
+    --navbar-height: 64px;
+  }
+
+  /* Hide desktop nav, show hamburger */
+  .navbar__nav { display: none; }
+  .hamburger   { display: flex; }
+
+  /* Hero: reduce padding */
+  .hero__content {
+    padding-block: var(--space-16);
+  }
+
+  /* Highlights: reduce padding */
+  .highlights,
+  .directory,
+  .submit-section {
+    padding-block: var(--space-16);
+  }
+
+  /* CTA banner: stack vertically */
+  .cta-banner__inner {
     flex-direction: column;
     text-align: center;
   }
-}
 
-#docs {
-  border-right: 1px solid var(--border);
+  /* Footer: single column */
+  .footer__inner {
+    grid-template-columns: 1fr;
+    gap: var(--space-8);
+  }
 
-  @media (max-width: 1024px) {
-    border-right: none;
-    border-bottom: 1px solid var(--border);
+  .footer__bottom-inner {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  /* Back to top: closer to edge on mobile */
+  .back-to-top {
+    bottom: var(--space-5);
+    right: var(--space-5);
+  }
+
+  /* Resource grid: single column on mobile */
+  .resource-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Filter buttons: smaller on mobile */
+  .filter-btn {
+    font-size: 0.8rem;
+    padding: var(--space-2) var(--space-3);
+  }
+
+  /* Form card: less padding on mobile */
+  .form-card {
+    padding: var(--space-6);
   }
 }
 
-#next-steps ul {
-  list-style: none;
-  padding: 0;
-  display: flex;
-  gap: 8px;
-  margin: 32px 0 0;
-
-  .logo {
-    height: 18px;
+/* --- Small phones (max-width: 480px) --- */
+@media (max-width: 480px) {
+  .container {
+    padding-inline: var(--space-4);
   }
 
-  a {
-    color: var(--text-h);
-    font-size: 16px;
-    border-radius: 6px;
-    background: var(--social-bg);
-    display: flex;
-    padding: 6px 12px;
-    align-items: center;
-    gap: 8px;
-    text-decoration: none;
-    transition: box-shadow 0.3s;
-
-    &:hover {
-      box-shadow: var(--shadow);
-    }
-    .button-icon {
-      height: 18px;
-      width: 18px;
-    }
+  /* Hero buttons: stack vertically */
+  .hero__cta {
+    flex-direction: column;
+    width: 100%;
+    max-width: 300px;
   }
 
-  @media (max-width: 1024px) {
-    margin-top: 20px;
-    flex-wrap: wrap;
-    justify-content: center;
+  .hero__cta .btn {
+    width: 100%;
+  }
 
-    li {
-      flex: 1 1 calc(50% - 8px);
-    }
+  /* Stat cards: wrap into 2 columns */
+  .hero__stats {
+    gap: var(--space-3);
+  }
 
-    a {
-      width: 100%;
-      justify-content: center;
-      box-sizing: border-box;
-    }
+  .stat-card {
+    min-width: 90px;
+    padding: var(--space-3) var(--space-4);
+  }
+
+  .stat-card__number {
+    font-size: 1.4rem;
   }
 }
 
-#spacer {
-  height: 88px;
-  border-top: 1px solid var(--border);
-  @media (max-width: 1024px) {
-    height: 48px;
-  }
-}
-
-.ticks {
-  position: relative;
-  width: 100%;
-
-  &::before,
-  &::after {
-    content: '';
-    position: absolute;
-    top: -4.5px;
-    border: 5px solid transparent;
+/* --- Print styles: for accessibility & usability --- */
+@media print {
+  .navbar,
+  .hero__blob,
+  .back-to-top,
+  .hero__scroll-indicator,
+  .filter-buttons,
+  .search-wrap,
+  .cta-banner {
+    display: none !important;
   }
 
-  &::before {
-    left: 0;
-    border-left-color: var(--border);
+  body {
+    font-size: 12pt;
+    color: #000;
+    background: #fff;
   }
-  &::after {
-    right: 0;
-    border-right-color: var(--border);
+
+  .hero {
+    min-height: auto;
+    padding: 20pt;
+    background: #fff;
+    color: #000;
+  }
+
+  .hero__heading,
+  .hero__subtext,
+  .hero__badge {
+    color: #000 !important;
+    -webkit-text-fill-color: #000 !important;
   }
 }
