@@ -1,7 +1,7 @@
 import { resolve } from 'path'
 
 export default {
-  base: '/ashburn-resource-hub/',
+  base: '/loudoun-resource-hub/',
   build: {
     rollupOptions: {
       input: {
